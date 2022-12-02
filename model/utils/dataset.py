@@ -79,7 +79,7 @@ def get_imgs_from_dir(path_a,path_b):
 class ImageFolder_pair(data.Dataset):
 
     def __init__(self, rootA, rootB, info_txt, keep_percent=1, transform=None, transform2=None, return_paths=False,
-                 loader=default_loader, dataset_num=1,get_direct=True,used_domain=None,aug=True):
+                 loader=default_loader, dataset_num=1,get_direct=True,used_domain=None,aug=True, input_path=None):
 
         imgsA=[]
         imgsB=[]
@@ -128,6 +128,7 @@ class ImageFolder_pair(data.Dataset):
         self.aug = aug
         self.return_paths = return_paths
         self.loader = loader
+        self.input_path = input_path
 
         print('len_imgA: ',len(self.imgsA))
         print('len_imgB: ',len(self.imgsB))
@@ -137,8 +138,8 @@ class ImageFolder_pair(data.Dataset):
         #index = 0
         pathA = self.imgsA[index]
         pathB = self.imgsB[index]
-        imgA = self.loader(pathA)
-        imgB = self.loader(pathB)
+        imgA = self.loader(os.path.join(self.input_path, pathA))
+        imgB = self.loader(os.path.join(self.input_path, pathB))
         name = pathA.split('/')[-1]
         if self.aug:
             mask1 = get_mask(imgB)
@@ -165,7 +166,8 @@ class ImageFolder_pair(data.Dataset):
         return len(self.imgsA)
 
 def get_data_loader_folder_pair(input_folderA, input_folderB, info_txt, batch_size, train, keep_percent, new_size=None,
-                           height=256, width=256, num_workers=8, crop=True,get_direct=True,used_domain=None,train_vr=False,return_paths=False):
+                           height=256, width=256, num_workers=8, crop=True,get_direct=True,used_domain=None,train_vr=False,return_paths=False,
+                           input_path=None):
     if train_vr is False:
         transform_list = []
         transform_list.append(transforms.RandomResizedCrop((300,400),scale=(0.7,1.0)))
@@ -186,7 +188,8 @@ def get_data_loader_folder_pair(input_folderA, input_folderB, info_txt, batch_si
         transform_list2.append(transforms.ToTensor())
         transform2 = transforms.Compose(transform_list2)
 
-    dataset = ImageFolder_pair(input_folderA, input_folderB, info_txt, keep_percent=keep_percent, transform=transform,transform2=transform2,get_direct=get_direct,used_domain=used_domain,return_paths=return_paths)
+    dataset = ImageFolder_pair(input_folderA, input_folderB, info_txt, keep_percent=keep_percent, transform=transform,transform2=transform2,
+    get_direct=get_direct,used_domain=used_domain,return_paths=return_paths,input_path=input_path)
     return dataset
 
 

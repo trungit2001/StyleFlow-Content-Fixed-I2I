@@ -50,7 +50,8 @@ def main():
                                                 args['keep_percent'],
                                                 get_direct=args['get_direct'],
                                                 used_domain=args['used_domain'],
-                                                train_vr=args['train_vr'])
+                                                train_vr=args['train_vr'],
+                                                input_path=args['input_path'])
                                                 
     train_sampler = DistributedGivenIterationSampler(train_dataset,
         args['max_iter'], args['batch_size'], world_size=1, rank=0, last_iter=last_iter)

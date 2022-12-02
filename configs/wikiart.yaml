@@ -6,9 +6,11 @@ get_direct: False
 
 used_domain: wikiart
 
-rootA: ../data/coco_10.txt # ms coco dataset
+input_path: /kaggle/input/styleflow-dataset/
 
-rootB: ../data/artist_10.txt # wikiart dataset
+rootA: /kaggle/input/styleflow-label/coco_10.txt # ms coco dataset
+
+rootB: /kaggle/input/styleflow-label/artist_10.txt # wikiart dataset
 
 infotxt: ///
 
@@ -36,7 +38,7 @@ lr: 0.00005
 
 lr_decay: 0.00005
 
-max_iter: 10000
+max_iter: 187900
 
 lr_steps: [40000,80000,120000]
 
