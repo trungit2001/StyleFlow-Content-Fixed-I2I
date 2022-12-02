@@ -8,6 +8,8 @@ from model.trainers.Trainer_StyleFlow import Trainer,set_random_seed#,Trainer_PC
 from model.utils.dataset import get_data_loader_folder_pair
 from model.utils.sampler import DistributedGivenIterationSampler
 from model.utils.utils import get_config
+from tqdm.auto import tqdm
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -60,7 +62,9 @@ def main():
         num_workers=args['workers'],
         pin_memory=False,
         sampler=train_sampler)
-    for batch_id, (content_iter, style_iter, source_iter, target_iter, code_iter, imgA_aug, imgB_aug, imgC_aug, imgD_aug) in enumerate(train_loader):
+
+    dset = tqdm(iter(train_loader))
+    for batch_id, (content_iter, style_iter, source_iter, target_iter, code_iter, imgA_aug, imgB_aug, imgC_aug, imgD_aug) in enumerate(dset):
         trainer.train(batch_id, content_iter, style_iter, source_iter, target_iter, code_iter, imgA_aug, imgB_aug, imgC_aug, imgD_aug)
 
 
